@@ -25,8 +25,8 @@ def create_bar(story_df):
 
 def create_wordcloud(story_df):
     text = story_df["Story"][0]
-    wordcloud = WordCloud(max_font_size=50, max_words=30, background_color="white").generate(text)
-    plt.figure(figsize=[10,10])
+    wordcloud = WordCloud(max_font_size=60, max_words=30, background_color="black").generate(text)
+    plt.figure(figsize=[25,12])
     plt.imshow(wordcloud, interpolation="bilinear")
     plt.axis("off")
     plt.savefig('./images/sentiment_cloud.png')
