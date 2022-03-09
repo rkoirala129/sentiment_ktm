@@ -10,7 +10,9 @@ from matplotlib import rc
 from wordcloud import WordCloud, STOPWORDS
 import matplotlib.pyplot as plt
 import pandas as pd
-from preprocess_data import to_list
+import nltk
+import pandas as pd
+#nltk.download('punkt')
 # % matplotlib inline
 # % config InlineBackend.figure_format='retina'
 
@@ -27,28 +29,26 @@ def sentiment_score(story):
 def to_sentiment(rating):
   rating = int(rating)
   if rating <= 2:
-    return 0
+    return "Negative"
   elif rating == 3:
-    return 1
+    return "Neutral"
   else:
-    return 2
+    return "Positive"
 
-
-def prep_data():
-    story_df = pd.read_csv("./csvs/ktm_post_edit_new.csv")
-    new_df = to_list(story_df["Story"][0])
+    
+def to_list(text):
+    new_list = nltk.tokenize.sent_tokenize(text)
+    new_df = pd.DataFrame(new_list)
+    new_df = new_df.rename({0 : 'sentences'}, axis=1)
     return new_df
+
 
 
 def calculate_sentiment(story_df):
     story_df['sentiment'] = story_df['sentences'].apply(lambda x: sentiment_score(x[:512]))
     story_df['new_sentiment'] = story_df['sentiment'].apply(lambda x: to_sentiment(x))
-    story_df.to_csv("./csvs/dff_sentiment.csv")
-
-
-abc = prep_data()
-
-calculate_sentiment(abc)
+    return story_df
+    # story_df.to_csv("./csvs/dff_sentiment.csv")
 
 
 
